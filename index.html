@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyFinance | Dimas Alfianto</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- ANIMASI BACKGROUND -->
+    <div class="bg-animation">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+
+    <div class="app-container">
+      <!-- HEADER -->
+      <header class="glass-panel header-panel">
+        <div class="header-text">
+          <h2>Halo, Dimas Alfianto!</h2>
+          <p>Atur strategi keuanganmu hari ini.</p>
+        </div>
+        <div class="avatar">D</div>
+      </header>
+
+      <!-- DASHBOARD GRID (4 KARTU) -->
+      <div class="dashboard-grid">
+        <!-- 1. Kartu Dompet -->
+        <div class="card glass-panel">
+          <span class="card-label">Saldo Dompet</span>
+          <h3 id="saldo-dompet" class="card-value text-green">Rp 0</h3>
+        </div>
+
+        <!-- 2. Kartu Tabungan -->
+        <div class="card glass-panel">
+          <span class="card-label">Total Tabungan</span>
+          <h3 id="saldo-tabungan" class="card-value text-blue">Rp 0</h3>
+        </div>
+
+        <!-- 3. Kartu Total Pengeluaran -->
+        <div class="card glass-panel">
+          <span class="card-label">Total Pengeluaran</span>
+          <h3 id="total-pengeluaran" class="card-value text-red">Rp 0</h3>
+        </div>
+
+        <!-- 4. Kartu Budget -->
+        <div class="card glass-panel">
+          <div class="flex-between">
+            <span class="card-label">Anggaran Bulanan</span>
+            <span id="budget-text" class="text-small">Rp 0 / Rp 0</span>
+          </div>
+          <h3 id="sisa-budget" class="card-value text-green">Belum diatur</h3>
+          <div class="progress-container">
+            <div id="budget-bar" class="progress-bar" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PENGATURAN (SETUP BUDGET & NABUNG) -->
+      <div class="glass-panel setup-panel">
+        <h3>⚙️ Atur Rencana Keuangan</h3>
+        <div class="form-grid-2">
+          <div class="input-group">
+            <label>Batas Pengeluaran / Bulan (Rp)</label>
+            <input type="number" id="set-budget" placeholder="Cth: 1500000" />
+            <button class="btn-small" onclick="simpanBudget()">
+              Set Budget
+            </button>
+          </div>
+          <div class="input-group">
+            <label>Pindahkan Uang ke Tabungan (Rp)</label>
+            <input type="number" id="add-goal" placeholder="Cth: 200000" />
+            <button class="btn-small bg-blue" onclick="nabung()">
+              Nabung Sekarang
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORM TRANSAKSI -->
+      <div class="glass-panel form-panel">
+        <h3>Catat Transaksi Baru</h3>
+        <div class="form-grid">
+          <select id="input-tipe">
+            <option value="pengeluaran">🔴 Pengeluaran</option>
+            <option value="pemasukan">🟢 Pemasukan</option>
+          </select>
+          <select id="input-kategori">
+            <option value="Makan">Makan & Minum</option>
+            <option value="Transport">Transportasi</option>
+            <option value="Jajan">Jajan / Hiburan</option>
+            <option value="Kebutuhan">Kebutuhan Pokok</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+          <input
+            type="text"
+            id="input-keterangan"
+            placeholder="Keterangan (cth: Nasi Padang)"
+          />
+          <input type="number" id="input-nominal" placeholder="Nominal (Rp)" />
+        </div>
+        <button class="btn-primary" onclick="tambahTransaksi()">
+          Simpan Transaksi
+        </button>
+      </div>
+
+      <!-- TABEL RIWAYAT -->
+      <div class="glass-panel table-panel">
+        <h3>Riwayat Transaksi</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Kategori</th>
+                <th>Keterangan</th>
+                <th class="text-right">Nominal</th>
+                <th class="text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tabel-transaksi">
+              <!-- Data diisi oleh JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TOMBOL RESET -->
+      <div class="reset-container">
+        <button class="btn-reset" onclick="resetData()">
+          🔄 Mulai Ulang dari Awal (Reset Data)
+        </button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
