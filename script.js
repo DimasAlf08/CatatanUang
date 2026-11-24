@@ -9,6 +9,24 @@ const formatRp = (angka) =>
     minimumFractionDigits: 0,
   }).format(angka);
 
+function formatTanggalTampilan(tanggalStr) {
+  if (!tanggalStr) return "-";
+  const [tahun, bulan, tgl] = tanggalStr.split("-");
+  if (!tahun || !bulan || !tgl) return tanggalStr;
+  return `${tgl}/${bulan}/${tahun}`;
+}
+
+function aturDefaultTanggal() {
+  const inputTgl = document.getElementById("input-tanggal");
+  if (inputTgl && !inputTgl.value) {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    inputTgl.value = `${yyyy}-${mm}-${dd}`;
+  }
+}
+
 function simpanBudget() {
   let val = document.getElementById("set-budget").value;
   if (val) {
@@ -40,6 +58,7 @@ function nabung() {
 }
 
 function tambahTransaksi() {
+  const tanggal = document.getElementById("input-tanggal").value;
   const tipe = document.getElementById("input-tipe").value;
   const kategori = document.getElementById("input-kategori").value;
   const keterangan = document.getElementById("input-keterangan").value;
@@ -52,6 +71,7 @@ function tambahTransaksi() {
 
   const dataBaru = {
     id: Date.now(),
+    tanggal: tanggal || new Date().toISOString().split("T")[0],
     tipe,
     kategori,
     keterangan,
@@ -62,6 +82,7 @@ function tambahTransaksi() {
 
   document.getElementById("input-keterangan").value = "";
   document.getElementById("input-nominal").value = "";
+  aturDefaultTanggal();
   tampilkanData();
 }
 
@@ -104,7 +125,9 @@ function tampilkanData() {
     }
 
     const tr = document.createElement("tr");
+    const tglTampil = formatTanggalTampilan(item.tanggal);
     tr.innerHTML = `
+            <td style="color: #94a3b8; font-size: 13px;">${tglTampil}</td>
             <td><span style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; font-size: 12px;">${item.kategori}</span></td>
             <td>${item.keterangan}</td>
             <td class="text-right ${classNominal}">${tanda} ${nominalFormat}</td>
@@ -172,4 +195,5 @@ function resetData() {
   }
 }
 
+aturDefaultTanggal();
 tampilkanData();

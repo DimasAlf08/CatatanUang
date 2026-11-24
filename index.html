@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MyFinance | Dimas Alfianto</title>
+    <title>MyFinance</title>
     <link rel="stylesheet" href="style.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
@@ -22,10 +22,9 @@
       <!-- HEADER -->
       <header class="glass-panel header-panel">
         <div class="header-text">
-          <h2>Halo, Dimas Alfianto!</h2>
+          <h2>Halo Sobat!!</h2>
           <p>Atur strategi keuanganmu hari ini.</p>
         </div>
-        <div class="avatar">D</div>
       </header>
 
       <!-- DASHBOARD GRID (4 KARTU) -->
@@ -86,6 +85,7 @@
       <div class="glass-panel form-panel">
         <h3>Catat Transaksi Baru</h3>
         <div class="form-grid">
+          <input type="date" id="input-tanggal" />
           <select id="input-tipe">
             <option value="pengeluaran">🔴 Pengeluaran</option>
             <option value="pemasukan">🟢 Pemasukan</option>
@@ -116,6 +116,7 @@
           <table>
             <thead>
               <tr>
+                <th>Tanggal</th>
                 <th>Kategori</th>
                 <th>Keterangan</th>
                 <th class="text-right">Nominal</th>
