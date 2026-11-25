@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MyFinance | Dashboard</title>
+    <title>Dashboard | MyFinance</title>
     <link rel="stylesheet" href="style.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
@@ -16,130 +16,140 @@
       <div class="orb orb-2"></div>
       <div class="orb orb-3"></div>
     </div>
+    <div class="dashboard-layout">
+      <!-- DEVSTUDIO GLASS NAVBAR -->
+      <header class="top-navbar-wrapper">
+        <nav class="devstudio-navbar">
+          <!-- KIRI: BRAND -->
+          <a href="index.html" class="nav-brand">
+            MyFinance
+          </a>
 
-    <div class="app-container">
-      <!-- HEADER -->
-      <header class="glass-panel header-panel">
-        <div class="header-text">
-          <h2>Halo Sobat!!</h2>
-          <p>Atur strategi keuanganmu hari ini.</p>
-        </div>
-        <div class="header-right">
-          <button
-            class="btn-settings"
-            onclick="gantiPassword()"
-            title="Ganti Password"
-          >
-            ⚙️
+          <!-- TENGAH: MENU DESKTOP -->
+          <div class="nav-links-center">
+            <a href="index.html" class="nav-link active">Home</a>
+            <a href="transaksi.html" class="nav-link">Transaksi</a>
+            <a href="rencana.html" class="nav-link">Rencana</a>
+            <a href="riwayat.html" class="nav-link">Riwayat</a>
+          </div>
+
+          <!-- KANAN: TOMBOL AKSI / LOGOUT (DESKTOP) -->
+          <div class="nav-right-btn">
+            <button class="btn-get-started" onclick="logout()" title="Keluar dari akun">
+              Keluar
+            </button>
+          </div>
+
+          <!-- HAMBURGER BUTTON (MOBILE) -->
+          <button class="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+            ☰
           </button>
-          <button class="btn-logout" onclick="logout()" title="Keluar">
-            ↪ Keluar
-          </button>
-        </div>
+
+          <!-- DROPDOWN MENU (MOBILE) -->
+          <div class="mobile-dropdown-menu" id="mobile-menu">
+            <a href="index.html" class="mobile-nav-link active">Home</a>
+            <a href="transaksi.html" class="mobile-nav-link">Transaksi</a>
+            <a href="rencana.html" class="mobile-nav-link">Rencana</a>
+            <a href="riwayat.html" class="mobile-nav-link">Riwayat</a>
+            <button class="mobile-btn-logout" onclick="logout()">↪ Keluar</button>
+          </div>
+        </nav>
       </header>
 
-      <!-- DASHBOARD GRID -->
-      <div class="dashboard-grid">
-        <div class="card glass-panel">
-          <span class="card-label">Saldo Dompet</span>
-          <h3 id="saldo-dompet" class="card-value text-green">Rp 0</h3>
-        </div>
-        <div class="card glass-panel">
-          <span class="card-label">Total Tabungan</span>
-          <h3 id="saldo-tabungan" class="card-value text-blue">Rp 0</h3>
-        </div>
-        <div class="card glass-panel">
-          <span class="card-label">Total Pengeluaran</span>
-          <h3 id="total-pengeluaran" class="card-value text-red">Rp 0</h3>
-        </div>
-        <div class="card glass-panel">
-          <div class="flex-between">
-            <span class="card-label">Anggaran Bulanan</span>
-            <span id="budget-text" class="text-small">Rp 0 / Rp 0</span>
+      <!-- KONTEN -->
+      <main class="main-content">
+        <div class="anim-fade-up anim-delay-1" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h2>Halo, <span id="nama-pengguna-teks">Sobat</span>!! 👋</h2>
+            <p style="color: #94a3b8; font-size: 14px; margin-top: 4px;">Pantau kondisi keuangan dan arus kas harianmu di sini.</p>
           </div>
-          <h3 id="sisa-budget" class="card-value text-green">Belum diatur</h3>
-          <div class="progress-container">
-            <div id="budget-bar" class="progress-bar" style="width: 0%"></div>
-          </div>
+          <span style="font-size: 13px; color: #38bdf8; background: rgba(56, 189, 248, 0.1); padding: 6px 14px; border-radius: 9999px; border: 1px solid rgba(56, 189, 248, 0.2);">
+            ✨ Dashboard Aktif
+          </span>
         </div>
-      </div>
 
-      <!-- PENGATURAN -->
-      <div class="glass-panel setup-panel">
-        <h3>⚙️ Atur Rencana Keuangan</h3>
-        <div class="form-grid-2">
-          <div class="input-group">
-            <label>Batas Pengeluaran / Bulan (Rp)</label>
-            <input type="number" id="set-budget" placeholder="Cth: 1500000" />
-            <button class="btn-small" onclick="simpanBudget()">
-              Set Budget
-            </button>
+        <!-- 4 KARTU STATISTIK (DASHBOARD GRID) -->
+        <div class="dashboard-grid anim-fade-up anim-delay-2">
+          <div class="card glass-panel">
+            <span class="card-label">Saldo Dompet</span>
+            <h3 id="saldo-dompet" class="card-value text-green">Rp 0</h3>
           </div>
-          <div class="input-group">
-            <label>Pindahkan Uang ke Tabungan (Rp)</label>
-            <input type="number" id="add-goal" placeholder="Cth: 200000" />
-            <button class="btn-small bg-blue" onclick="nabung()">
-              Nabung Sekarang
-            </button>
+          <div class="card glass-panel">
+            <span class="card-label">Total Tabungan</span>
+            <h3 id="saldo-tabungan" class="card-value text-blue">Rp 0</h3>
+          </div>
+          <div class="card glass-panel">
+            <span class="card-label">Total Pengeluaran</span>
+            <h3 id="total-pengeluaran" class="card-value text-red">Rp 0</h3>
+          </div>
+          <div class="card glass-panel">
+            <div class="flex-between">
+              <span class="card-label">Anggaran Bulanan</span>
+              <span id="budget-text" class="text-small">Rp 0 / Rp 0</span>
+            </div>
+            <h3 id="sisa-budget" class="card-value text-green">Belum diatur</h3>
+            <div class="progress-container">
+              <div id="budget-bar" class="progress-bar" style="width: 0%"></div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- FORM TRANSAKSI -->
-      <div class="glass-panel form-panel">
-        <h3>Catat Transaksi Baru</h3>
-        <div class="form-grid">
-          <input type="date" id="input-tanggal" />
-          <select id="input-tipe">
-            <option value="pengeluaran">🔴 Pengeluaran</option>
-            <option value="pemasukan">🟢 Pemasukan</option>
-          </select>
-          <select id="input-kategori">
-            <option value="Makan">Makan & Minum</option>
-            <option value="Transport">Transportasi</option>
-            <option value="Jajan">Jajan / Hiburan</option>
-            <option value="Kebutuhan">Kebutuhan Pokok</option>
-            <option value="Lainnya">Lainnya</option>
-          </select>
-          <input
-            type="text"
-            id="input-keterangan"
-            placeholder="Keterangan (cth: Nasi Padang)"
-          />
-          <input type="number" id="input-nominal" placeholder="Nominal (Rp)" />
+        <!-- AKSES CEPAT (QUICK ACTIONS) -->
+        <div class="anim-fade-up anim-delay-3">
+          <h3 style="margin-bottom: 12px; font-size: 16px; color: #cbd5e1;">⚡ Akses Cepat</h3>
+          <div class="quick-action-grid">
+            <a href="transaksi.html" class="glass-panel quick-action-card">
+              <div class="action-icon icon-blue">➕</div>
+              <div class="action-text">
+                <h4>Catat Transaksi</h4>
+                <p>Tambah pemasukan atau pengeluaran baru</p>
+              </div>
+            </a>
+            <a href="rencana.html" class="glass-panel quick-action-card">
+              <div class="action-icon icon-purple">🎯</div>
+              <div class="action-text">
+                <h4>Rencana & Nabung</h4>
+                <p>Atur batas budget atau tabung saldo</p>
+              </div>
+            </a>
+            <a href="riwayat.html" class="glass-panel quick-action-card">
+              <div class="action-icon icon-green">📋</div>
+              <div class="action-text">
+                <h4>Lihat Semua Riwayat</h4>
+                <p>Kelola dan evaluasi riwayat lengkap</p>
+              </div>
+            </a>
+          </div>
         </div>
-        <button class="btn-primary" onclick="tambahTransaksi()">
-          Simpan Transaksi
-        </button>
-      </div>
 
-      <!-- TABEL RIWAYAT -->
-      <div class="glass-panel table-panel">
-        <h3>Riwayat Transaksi</h3>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Tanggal</th>
-                <th>Kategori</th>
-                <th>Keterangan</th>
-                <th class="text-right">Nominal</th>
-                <th class="text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="tabel-transaksi"></tbody>
-          </table>
+        <!-- PRATINJAU TRANSAKSI TERAKHIR (SCROLLABLE KE BAWAH) -->
+        <div class="glass-panel table-panel anim-fade-up anim-delay-4" style="margin-top: 5px;">
+          <div class="flex-between" style="margin-bottom: 15px;">
+            <h3>🕒 Transaksi Terbaru</h3>
+            <a href="riwayat.html" style="color: #38bdf8; font-size: 13px; text-decoration: none; font-weight: 600;">Lihat Semua &rarr;</a>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Kategori</th>
+                  <th>Keterangan</th>
+                  <th class="text-right">Nominal</th>
+                  <th class="text-center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tabel-transaksi"></tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-      <!-- TOMBOL RESET -->
-      <div class="reset-container">
-        <button class="btn-reset" onclick="resetData()">
-          🔄 Mulai Ulang dari Awal (Reset Data)
-        </button>
-      </div>
+        <!-- FOOTER DASHBOARD -->
+        <div class="anim-fade-up anim-delay-4" style="text-align: center; color: #64748b; font-size: 13px; padding: 20px 0 30px;">
+          <p>MyFinance &bull; Pengelola Keuangan Pribadi</p>
+        </div>
+      </main>
     </div>
-
     <script src="script.js"></script>
   </body>
 </html>

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transaksi | MyFinance</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="bg-animation">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <div class="dashboard-layout">
+      <!-- DEVSTUDIO GLASS NAVBAR -->
+      <header class="top-navbar-wrapper">
+        <nav class="devstudio-navbar">
+          <a href="index.html" class="nav-brand">MyFinance</a>
+
+          <div class="nav-links-center">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="transaksi.html" class="nav-link active">Transaksi</a>
+            <a href="rencana.html" class="nav-link">Rencana</a>
+            <a href="riwayat.html" class="nav-link">Riwayat</a>
+          </div>
+
+          <div class="nav-right-btn">
+            <button class="btn-get-started" onclick="logout()" title="Keluar dari akun">
+              Keluar
+            </button>
+          </div>
+
+          <button class="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+            ☰
+          </button>
+
+          <div class="mobile-dropdown-menu" id="mobile-menu">
+            <a href="index.html" class="mobile-nav-link">Home</a>
+            <a href="transaksi.html" class="mobile-nav-link active">Transaksi</a>
+            <a href="rencana.html" class="mobile-nav-link">Rencana</a>
+            <a href="riwayat.html" class="mobile-nav-link">Riwayat</a>
+            <button class="mobile-btn-logout" onclick="logout()">↪ Keluar</button>
+          </div>
+        </nav>
+      </header>
+      <main class="main-content">
+        <div class="glass-panel form-panel">
+          <h3>📝 Catat Transaksi Baru</h3>
+          <div class="form-grid">
+            <input type="date" id="input-tanggal" />
+            <select id="input-tipe">
+              <option value="pengeluaran">🔴 Pengeluaran</option>
+              <option value="pemasukan">🟢 Pemasukan</option>
+            </select>
+            <select id="input-kategori">
+              <option value="Makan">Makan & Minum</option>
+              <option value="Transport">Transportasi</option>
+              <option value="Jajan">Jajan / Hiburan</option>
+              <option value="Kebutuhan">Kebutuhan Pokok</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+            <input
+              type="text"
+              id="input-keterangan"
+              placeholder="Keterangan (cth: Nasi Padang)"
+            />
+            <input
+              type="number"
+              id="input-nominal"
+              placeholder="Nominal (Rp)"
+            />
+          </div>
+          <button class="btn-primary" onclick="tambahTransaksi()">
+            Simpan Transaksi
+          </button>
+        </div>
+      </main>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

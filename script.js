@@ -12,29 +12,6 @@ function logout() {
   }
 }
 
-function gantiPassword() {
-  let passwordTersimpan = localStorage.getItem("userPassword") || "alfianto";
-  let passLama = prompt("Masukkan password lama kamu:");
-  if (passLama !== passwordTersimpan) {
-    alert("❌ Password lama salah!");
-    return;
-  }
-  let passBaru = prompt("Masukkan password baru:");
-  if (!passBaru || passBaru.trim() === "") {
-    alert("❌ Password baru tidak boleh kosong!");
-    return;
-  }
-  let konfirmasiPass = prompt("Ketik ulang password baru kamu:");
-  if (passBaru !== konfirmasiPass) {
-    alert("❌ Konfirmasi password tidak cocok!");
-    return;
-  }
-  localStorage.setItem("userPassword", passBaru);
-  alert(
-    "✅ Password berhasil diubah! Gunakan password baru saat login berikutnya.",
-  );
-}
-
 // ==========================================
 // 2. LOGIKA KEUANGAN
 // ==========================================
@@ -52,7 +29,6 @@ const formatRp = (angka) =>
 function formatTanggalTampilan(tanggalStr) {
   if (!tanggalStr) return "-";
   const [tahun, bulan, tgl] = tanggalStr.split("-");
-  if (!tahun || !bulan || !tgl) return tanggalStr;
   return `${tgl}/${bulan}/${tahun}`;
 }
 
@@ -73,8 +49,8 @@ function simpanBudget() {
     budgetBulanan = parseInt(val);
     localStorage.setItem("budgetBulanan", budgetBulanan);
     document.getElementById("set-budget").value = "";
-    tampilkanData();
-    alert("Batas pengeluaran bulan ini berhasil diatur!");
+    alert("Batas pengeluaran berhasil diatur!");
+    updateRingkasan();
   }
 }
 
@@ -84,14 +60,14 @@ function nabung() {
     let nominalNabung = parseInt(val);
     let sisaDompetSaatIni = hitungSaldoDompet();
     if (nominalNabung > sisaDompetSaatIni) {
-      alert("Uang di dompetmu tidak cukup untuk ditabung sebanyak itu!");
+      alert("Uang di dompetmu tidak cukup!");
       return;
     }
     saldoTabungan += nominalNabung;
     localStorage.setItem("saldoTabungan", saldoTabungan);
     document.getElementById("add-goal").value = "";
-    tampilkanData();
     alert(`Berhasil memindahkan ${formatRp(nominalNabung)} ke tabungan!`);
+    updateRingkasan();
   }
 }
 
@@ -115,9 +91,15 @@ function tambahTransaksi() {
     return;
   }
 
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
+  const tglDefault = `${yyyy}-${mm}-${dd}`;
+
   const dataBaru = {
     id: Date.now(),
-    tanggal: tanggal || new Date().toISOString().split("T")[0],
+    tanggal: tanggal || tglDefault,
     tipe,
     kategori,
     keterangan,
@@ -126,23 +108,22 @@ function tambahTransaksi() {
   daftarTransaksi.push(dataBaru);
   localStorage.setItem("dataKeuangan", JSON.stringify(daftarTransaksi));
 
-  document.getElementById("input-keterangan").value = "";
-  document.getElementById("input-nominal").value = "";
-  aturDefaultTanggal();
-  tampilkanData();
+  alert("Transaksi berhasil disimpan!");
+  window.location.href = "riwayat.html";
 }
 
 function hapusTransaksi(id) {
   if (confirm("Yakin mau hapus catatan ini?")) {
     daftarTransaksi = daftarTransaksi.filter((item) => item.id !== id);
     localStorage.setItem("dataKeuangan", JSON.stringify(daftarTransaksi));
-    tampilkanData();
+    tampilkanTabel(); // Panggil fungsi tabel
+    updateRingkasan(); // Update ringkasan jika ada di halaman
   }
 }
 
 function hitungSaldoDompet() {
-  let totalMasuk = 0;
-  let totalKeluar = 0;
+  let totalMasuk = 0,
+    totalKeluar = 0;
   daftarTransaksi.forEach((item) => {
     if (item.tipe === "pemasukan") totalMasuk += item.nominal;
     else totalKeluar += item.nominal;
@@ -150,101 +131,152 @@ function hitungSaldoDompet() {
   return totalMasuk - totalKeluar - saldoTabungan;
 }
 
-function tampilkanData() {
-  const tbody = document.getElementById("tabel-transaksi");
-  tbody.innerHTML = "";
-  let totalKeluarUntukBudget = 0;
+// ==========================================
+// 3. FUNGSI TAMPILAN (Dicek per halaman)
+// ==========================================
 
-  // Urutkan berdasarkan tanggal terbaru, lalu id terbaru
-  daftarTransaksi.sort((a, b) => {
-    if (b.tanggal && a.tanggal && b.tanggal !== a.tanggal) {
-      return b.tanggal.localeCompare(a.tanggal);
+// Fungsi untuk halaman index.html (Ringkasan)
+function updateRingkasan() {
+  if (document.getElementById("saldo-dompet")) {
+    let totalKeluar = daftarTransaksi
+      .filter((t) => t.tipe === "pengeluaran")
+      .reduce((a, b) => a + b.nominal, 0);
+    let sisaDompet = hitungSaldoDompet();
+
+    document.getElementById("saldo-dompet").innerText = formatRp(sisaDompet);
+    document.getElementById("saldo-dompet").className =
+      sisaDompet < 0 ? "card-value text-red" : "card-value text-green";
+    document.getElementById("saldo-tabungan").innerText =
+      formatRp(saldoTabungan);
+    document.getElementById("total-pengeluaran").innerText =
+      formatRp(totalKeluar);
+
+    let sisaBudget = budgetBulanan - totalKeluar;
+    document.getElementById("budget-text").innerText =
+      `${formatRp(totalKeluar)} / ${formatRp(budgetBulanan)}`;
+
+    let sisaBudgetEl = document.getElementById("sisa-budget");
+    let budgetBarEl = document.getElementById("budget-bar");
+
+    if (budgetBulanan > 0) {
+      let persen = (totalKeluar / budgetBulanan) * 100;
+      budgetBarEl.style.width = Math.min(persen, 100) + "%";
+      if (sisaBudget < 0) {
+        sisaBudgetEl.innerText = "Overbudget! " + formatRp(sisaBudget);
+        sisaBudgetEl.className = "card-value text-red";
+        budgetBarEl.style.background = "#f87171";
+      } else {
+        sisaBudgetEl.innerText = "Sisa: " + formatRp(sisaBudget);
+        sisaBudgetEl.className = "card-value text-green";
+        budgetBarEl.style.background = persen > 80 ? "#fbbf24" : "#4ade80";
+      }
+    } else {
+      sisaBudgetEl.innerText = "Belum diatur";
     }
-    return (b.id || 0) - (a.id || 0);
-  });
+  }
+}
 
-  if (daftarTransaksi.length === 0) {
-    const trKosong = document.createElement("tr");
-    trKosong.innerHTML = `
-      <td colspan="5" class="text-center" style="color: #64748b; padding: 30px;">
-        Belum ada riwayat transaksi. Tambahkan transaksi barumu di atas!
-      </td>
-    `;
-    tbody.appendChild(trKosong);
-  } else {
-    daftarTransaksi.forEach((item) => {
+// Fungsi untuk halaman riwayat.html & index.html (Tabel)
+function tampilkanTabel() {
+  const tbody = document.getElementById("tabel-transaksi");
+  if (tbody) {
+    tbody.innerHTML = "";
+    daftarTransaksi.sort((a, b) => {
+      if (b.tanggal && a.tanggal && b.tanggal !== a.tanggal) {
+        return b.tanggal.localeCompare(a.tanggal);
+      }
+      return (b.id || 0) - (a.id || 0);
+    });
+
+    if (daftarTransaksi.length === 0) {
+      const trKosong = document.createElement("tr");
+      trKosong.innerHTML = `
+        <td colspan="5" class="text-center" style="color: #64748b; padding: 30px;">
+          Belum ada riwayat transaksi. <a href="transaksi.html" style="color: #38bdf8; text-decoration: none;">Tambah transaksi baru</a>
+        </td>
+      `;
+      tbody.appendChild(trKosong);
+      return;
+    }
+
+    // Jika di dashboard index.html, tampilkan 5 transaksi terakhir saja agar rapi
+    const isDashboard = window.location.pathname.endsWith("index.html") || window.location.pathname.endsWith("/");
+    const dataDitampilkan = isDashboard ? daftarTransaksi.slice(0, 5) : daftarTransaksi;
+
+    dataDitampilkan.forEach((item) => {
       const nominalFormat = formatRp(item.nominal);
       let classNominal =
         item.tipe === "pemasukan" ? "nominal-masuk" : "nominal-keluar";
       let tanda = item.tipe === "pemasukan" ? "+" : "-";
 
-      if (item.tipe === "pengeluaran") totalKeluarUntukBudget += item.nominal;
-
       const tr = document.createElement("tr");
-      const tglTampil = formatTanggalTampilan(item.tanggal);
       tr.innerHTML = `
-              <td style="color: #94a3b8; font-size: 13px;">${tglTampil}</td>
-              <td><span style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; font-size: 12px;">${item.kategori}</span></td>
-              <td>${item.keterangan}</td>
-              <td class="text-right ${classNominal}">${tanda} ${nominalFormat}</td>
-              <td class="text-center"><button class="btn-hapus" onclick="hapusTransaksi(${item.id})">Hapus</button></td>
-          `;
+        <td style="color: #94a3b8; font-size: 13px;">${formatTanggalTampilan(item.tanggal)}</td>
+        <td><span style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; font-size: 12px;">${item.kategori}</span></td>
+        <td>${item.keterangan}</td>
+        <td class="text-right ${classNominal}">${tanda} ${nominalFormat}</td>
+        <td class="text-center"><button class="btn-hapus" onclick="hapusTransaksi(${item.id})">Hapus</button></td>
+      `;
       tbody.appendChild(tr);
     });
-  }
-
-  let sisaDompet = hitungSaldoDompet();
-  const dompetEl = document.getElementById("saldo-dompet");
-  dompetEl.innerText = formatRp(sisaDompet);
-  dompetEl.className =
-    sisaDompet < 0 ? "card-value text-red" : "card-value text-green";
-
-  document.getElementById("saldo-tabungan").innerText = formatRp(saldoTabungan);
-  document.getElementById("total-pengeluaran").innerText = formatRp(
-    totalKeluarUntukBudget,
-  );
-
-  let sisaBudget = budgetBulanan - totalKeluarUntukBudget;
-  document.getElementById("budget-text").innerText =
-    `${formatRp(totalKeluarUntukBudget)} / ${formatRp(budgetBulanan)}`;
-
-  const sisaBudgetEl = document.getElementById("sisa-budget");
-  const budgetBarEl = document.getElementById("budget-bar");
-
-  if (budgetBulanan > 0) {
-    let persen = (totalKeluarUntukBudget / budgetBulanan) * 100;
-    budgetBarEl.style.width = Math.min(persen, 100) + "%";
-    if (sisaBudget < 0) {
-      sisaBudgetEl.innerText = "Overbudget! " + formatRp(sisaBudget);
-      sisaBudgetEl.className = "card-value text-red";
-      budgetBarEl.style.background = "#f87171";
-    } else {
-      sisaBudgetEl.innerText = "Sisa: " + formatRp(sisaBudget);
-      sisaBudgetEl.className = "card-value text-green";
-      budgetBarEl.style.background = persen > 80 ? "#fbbf24" : "#4ade80";
-    }
-  } else {
-    sisaBudgetEl.innerText = "Belum diatur";
-    sisaBudgetEl.className = "card-value text-small";
-    budgetBarEl.style.width = "0%";
   }
 }
 
 function resetData() {
   let yakin = confirm(
-    "⚠️ PERINGATAN!\n\nApakah kamu yakin ingin menghapus SEMUA data transaksi, tabungan, dan anggaran?\nTindakan ini tidak bisa dibatalkan.",
+    "⚠️ PERINGATAN!\n\nApakah kamu yakin ingin menghapus SEMUA data?",
   );
   if (yakin) {
     localStorage.removeItem("dataKeuangan");
     localStorage.removeItem("budgetBulanan");
     localStorage.removeItem("saldoTabungan");
-    daftarTransaksi = [];
-    budgetBulanan = 0;
-    saldoTabungan = 0;
-    tampilkanData();
-    alert("✅ Data berhasil dihapus! Kamu siap mulai dari awal lagi.");
+    location.reload();
   }
 }
 
+function updateBadgeTotal() {
+  const badge = document.getElementById("badge-total-transaksi");
+  if (badge) {
+    badge.innerText = daftarTransaksi.length;
+  }
+}
+
+function updateNamaPengguna() {
+  const el = document.getElementById("nama-pengguna-teks");
+  if (el) {
+    const dataAkun = localStorage.getItem("akunPengguna");
+    if (dataAkun) {
+      try {
+        const parsed = JSON.parse(dataAkun);
+        if (parsed && parsed.username) {
+          el.innerText = parsed.username.charAt(0).toUpperCase() + parsed.username.slice(1);
+          return;
+        }
+      } catch (e) {}
+    }
+    el.innerText = "Sobat";
+  }
+}
+
+function toggleMobileMenu() {
+  const menu = document.getElementById("mobile-menu");
+  if (menu) {
+    menu.classList.toggle("show");
+  }
+}
+
+// Tutup mobile menu jika klik di luar navbar
+document.addEventListener("click", (e) => {
+  const navbar = document.querySelector(".devstudio-navbar");
+  const menu = document.getElementById("mobile-menu");
+  if (navbar && menu && !navbar.contains(e.target)) {
+    menu.classList.remove("show");
+  }
+});
+
+// Jalankan fungsi yang sesuai saat halaman dimuat
 aturDefaultTanggal();
-tampilkanData();
+updateRingkasan();
+tampilkanTabel();
+updateBadgeTotal();
+updateNamaPengguna();

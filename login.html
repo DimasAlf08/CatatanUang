@@ -17,7 +17,32 @@
     </div>
 
     <div class="login-overlay">
-        <div class="glass-panel login-box">
+        <!-- BOX REGISTER (DAFTAR AKUN BARU) -->
+        <div class="glass-panel login-box" id="box-register" style="display: none;">
+            <h2>Buat Akun Baru</h2>
+            <p>Daftar sekarang untuk mengelola keuanganmu.</p>
+            
+            <form id="form-register" onsubmit="event.preventDefault(); prosesDaftar();">
+                <div class="input-group" style="margin-top: 20px; margin-bottom: 15px;">
+                    <input type="text" id="reg-username" placeholder="Buat Username" required autocomplete="username">
+                    <input type="password" id="reg-password" placeholder="Buat Password" required autocomplete="new-password">
+                    <input type="password" id="reg-konfirmasi" placeholder="Ulangi Password" required autocomplete="new-password">
+                </div>
+                
+                <p id="reg-error" class="text-red" style="display: none; font-size: 13px; margin-bottom: 15px; text-align: center;"></p>
+                <p id="reg-sukses" class="text-green" style="display: none; font-size: 13px; margin-bottom: 15px; text-align: center;"></p>
+                
+                <button type="submit" class="btn-primary" style="margin-bottom: 15px;">Daftar Akun</button>
+            </form>
+
+            <div style="font-size: 13px; color: #94a3b8; text-align: center;">
+                Sudah punya akun? 
+                <button type="button" class="btn-text-link" onclick="bukaBox('login')">Masuk di sini</button>
+            </div>
+        </div>
+
+        <!-- BOX LOGIN -->
+        <div class="glass-panel login-box" id="box-login">
             <h2>Welcome Back</h2>
             <p>Masuk untuk mengatur keuanganmu.</p>
             
@@ -30,6 +55,32 @@
                 <p id="login-error" class="text-red" style="display: none; font-size: 13px; margin-bottom: 15px; text-align: center;">Username atau Password salah!</p>
                 
                 <button type="submit" class="btn-primary">Masuk</button>
+            </form>
+
+            <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px;">
+                <button type="button" class="btn-text-link" onclick="bukaBox('register')">Buat Akun Baru</button>
+                <button type="button" class="btn-text-link" onclick="bukaBox('ubah-password')">Ubah Password</button>
+            </div>
+        </div>
+
+        <!-- BOX UBAH PASSWORD -->
+        <div class="glass-panel login-box" id="box-ubah-password" style="display: none;">
+            <h2>Ubah Password</h2>
+            <p>Perbarui password akun kamu.</p>
+            
+            <form id="form-ubah-password" onsubmit="event.preventDefault(); prosesUbahPassword();">
+                <div class="input-group" style="margin-top: 20px; margin-bottom: 15px;">
+                    <input type="text" id="ubah-username" placeholder="Konfirmasi Username" required autocomplete="username">
+                    <input type="password" id="ubah-pass-lama" placeholder="Password Lama" required autocomplete="current-password">
+                    <input type="password" id="ubah-pass-baru" placeholder="Password Baru" required autocomplete="new-password">
+                    <input type="password" id="ubah-pass-konfirmasi" placeholder="Ulangi Password Baru" required autocomplete="new-password">
+                </div>
+                
+                <p id="ubah-error" class="text-red" style="display: none; font-size: 13px; margin-bottom: 15px; text-align: center;"></p>
+                <p id="ubah-sukses" class="text-green" style="display: none; font-size: 13px; margin-bottom: 15px; text-align: center;"></p>
+                
+                <button type="submit" class="btn-primary" style="margin-bottom: 10px;">Simpan Password Baru</button>
+                <button type="button" class="btn-small" style="width: 100%;" onclick="bukaBox('login')">Kembali ke Login</button>
             </form>
         </div>
     </div>
