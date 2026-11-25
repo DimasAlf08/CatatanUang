@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MyFinance</title>
+    <title>MyFinance | Dashboard</title>
     <link rel="stylesheet" href="style.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
@@ -11,7 +11,6 @@
     />
   </head>
   <body>
-    <!-- ANIMASI BACKGROUND -->
     <div class="bg-animation">
       <div class="orb orb-1"></div>
       <div class="orb orb-2"></div>
@@ -25,29 +24,34 @@
           <h2>Halo Sobat!!</h2>
           <p>Atur strategi keuanganmu hari ini.</p>
         </div>
+        <div class="header-right">
+          <button
+            class="btn-settings"
+            onclick="gantiPassword()"
+            title="Ganti Password"
+          >
+            ⚙️
+          </button>
+          <button class="btn-logout" onclick="logout()" title="Keluar">
+            ↪ Keluar
+          </button>
+        </div>
       </header>
 
-      <!-- DASHBOARD GRID (4 KARTU) -->
+      <!-- DASHBOARD GRID -->
       <div class="dashboard-grid">
-        <!-- 1. Kartu Dompet -->
         <div class="card glass-panel">
           <span class="card-label">Saldo Dompet</span>
           <h3 id="saldo-dompet" class="card-value text-green">Rp 0</h3>
         </div>
-
-        <!-- 2. Kartu Tabungan -->
         <div class="card glass-panel">
           <span class="card-label">Total Tabungan</span>
           <h3 id="saldo-tabungan" class="card-value text-blue">Rp 0</h3>
         </div>
-
-        <!-- 3. Kartu Total Pengeluaran -->
         <div class="card glass-panel">
           <span class="card-label">Total Pengeluaran</span>
           <h3 id="total-pengeluaran" class="card-value text-red">Rp 0</h3>
         </div>
-
-        <!-- 4. Kartu Budget -->
         <div class="card glass-panel">
           <div class="flex-between">
             <span class="card-label">Anggaran Bulanan</span>
@@ -60,7 +64,7 @@
         </div>
       </div>
 
-      <!-- PENGATURAN (SETUP BUDGET & NABUNG) -->
+      <!-- PENGATURAN -->
       <div class="glass-panel setup-panel">
         <h3>⚙️ Atur Rencana Keuangan</h3>
         <div class="form-grid-2">
@@ -123,9 +127,7 @@
                 <th class="text-center">Aksi</th>
               </tr>
             </thead>
-            <tbody id="tabel-transaksi">
-              <!-- Data diisi oleh JavaScript -->
-            </tbody>
+            <tbody id="tabel-transaksi"></tbody>
           </table>
         </div>
       </div>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | MyFinance</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- ANIMASI BACKGROUND -->
+    <div class="bg-animation">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="login-overlay">
+        <div class="glass-panel login-box">
+            <h2>Welcome Back</h2>
+            <p>Masuk untuk mengatur keuanganmu.</p>
+            
+            <form id="form-login" onsubmit="event.preventDefault(); prosesLogin();">
+                <div class="input-group" style="margin-top: 20px; margin-bottom: 15px;">
+                    <input type="text" id="login-username" placeholder="Username" required autocomplete="username">
+                    <input type="password" id="login-password" placeholder="Password" required autocomplete="current-password">
+                </div>
+                
+                <p id="login-error" class="text-red" style="display: none; font-size: 13px; margin-bottom: 15px; text-align: center;">Username atau Password salah!</p>
+                
+                <button type="submit" class="btn-primary">Masuk</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>
